@@ -263,9 +263,9 @@ GameObject:
   - component: {fileID: 3467675294385484447}
   - component: {fileID: 5363685766795169661}
   - component: {fileID: 1583502478095606375}
-  - component: {fileID: 6764642655643838932}
+  - component: {fileID: 4587864730618259235}
   m_Layer: 0
-  m_Name: YogoretaPlate
+  m_Name: WashPlate
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -336,7 +336,7 @@ CircleCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Radius: 1
---- !u!114 &6764642655643838932
+--- !u!114 &4587864730618259235
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -345,11 +345,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 7376507561723402469}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 72741752b61324beb8479c78242dbaf0, type: 3}
+  m_Script: {fileID: 11500000, guid: dd968cc9e57cb4af1989a67b5e32e2c7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   dirtRenderer: {fileID: 930846056343889152}
-  brushRadius: 3
-  cleanPower: 0.05
+  brushRadius: 16
+  cleanPower: 0.15
   cleanThreshold: 0.1
-  spongeVisual: {fileID: 6076623882174699968}
+  spongeVisual: {fileID: 5894969527065381434, guid: efc0d5bf99b534b8cbe80e46fad5ce00, type: 3}

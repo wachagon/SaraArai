@@ -806,7 +806,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moneyText: {fileID: 1842080549}
-  platePrefab: {fileID: 7376507561723402469, guid: 9ee14c553b43d4ec28118cc63fa64072, type: 3}
+  platePrefab: {fileID: 7376507561723402469, guid: e5fb58ef5450541418efd903d3411aee, type: 3}
+  washPlatePrefab: {fileID: 7376507561723402469, guid: 9ee14c553b43d4ec28118cc63fa64072, type: 3}
+  washPoint: {fileID: 1722312112}
   plateSpawnMinPoint: {fileID: 1472725708}
   plateSpawnMaxPoint: {fileID: 1809867964}
   plateSlideDuration: 0.5
