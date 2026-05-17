@@ -11,6 +11,9 @@ public class Player : MonoBehaviour
     private Rigidbody2D rb;
     private Vector2 moveInput;
 
+    public float shootInterval = 0.5f;
+    private float shootTimer = 0f;
+
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -23,16 +26,22 @@ public class Player : MonoBehaviour
 
         moveInput = new Vector2(moveX, moveY).normalized;
 
+        if (shootTimer > 0)
+        {
+            shootTimer -= Time.deltaTime;
+        }
+
         // 2. 十字キー（矢印キー）で弾を発射
         Vector2 shootDir = Vector2.zero;
-        if (Input.GetKeyDown(KeyCode.UpArrow)) shootDir = Vector2.up;
-        if (Input.GetKeyDown(KeyCode.DownArrow)) shootDir = Vector2.down;
-        if (Input.GetKeyDown(KeyCode.LeftArrow)) shootDir = Vector2.left;
-        if (Input.GetKeyDown(KeyCode.RightArrow)) shootDir = Vector2.right;
+        if (Input.GetKey(KeyCode.UpArrow)) shootDir = Vector2.up;
+        if (Input.GetKey(KeyCode.DownArrow)) shootDir = Vector2.down;
+        if (Input.GetKey(KeyCode.LeftArrow)) shootDir = Vector2.left;
+        if (Input.GetKey(KeyCode.RightArrow)) shootDir = Vector2.right;
 
-        if (shootDir != Vector2.zero)
+        if (shootTimer <= 0 && shootDir != Vector2.zero)
         {
             Shoot(shootDir);
+            shootTimer = shootInterval;
         }
     }
 
