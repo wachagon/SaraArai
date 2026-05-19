@@ -16,6 +16,8 @@ public class Plate : MonoBehaviour
     [SerializeField] private float clickTimeLimit = 0.2f;
     [SerializeField] private float dragStartDistance = 0.2f;
     [SerializeField] private GameObject dirtVisual;
+    [SerializeField] private string stockTargetName = "Stock";
+    [SerializeField] private string moneyTargetName = "Money";
     private float mouseDownTime;
 
     void Awake()
@@ -64,15 +66,18 @@ public class Plate : MonoBehaviour
         {
             return;
         }
+
+        if (isClean)
+        {
+            TryDropCleanPlate();
+            isDragging = false;
+            return;
+        }
         
         float holdTime = Time.time - mouseDownTime;
 
         if (!isDragging && holdTime <= clickTimeLimit)
         {
-            if (isClean)
-            {
-                return;
-            }
             gameManager.StartWashing(this);
         }
         
@@ -108,5 +113,52 @@ public class Plate : MonoBehaviour
     public void ClearWashPlate()
     {
         washPlate = null;
+    }
+
+    private void TryDropCleanPlate()
+    {
+        Collider2D dropTarget = FindDropTarget();
+        if (dropTarget == null)
+        {
+            return;
+        }
+
+        if (dropTarget.name == stockTargetName)
+        {
+            gameManager.AddCleanPlateToStock();
+            Destroy(gameObject);
+            return;
+        }
+
+        if (dropTarget.name == moneyTargetName)
+        {
+            gameManager.SellCleanPlate();
+            Destroy(gameObject);
+        }
+    }
+
+    private Collider2D FindDropTarget()
+    {
+        Collider2D dropTarget = FindDropTargetAtPoint(GetMouseWorldPosition());
+        if (dropTarget != null)
+        {
+            return dropTarget;
+        }
+
+        return FindDropTargetAtPoint(transform.position);
+    }
+
+    private Collider2D FindDropTargetAtPoint(Vector3 position)
+    {
+        Collider2D[] colliders = Physics2D.OverlapPointAll(position);
+        foreach (Collider2D collider in colliders)
+        {
+            if (collider.name == stockTargetName || collider.name == moneyTargetName)
+            {
+                return collider;
+            }
+        }
+
+        return null;
     }
 }

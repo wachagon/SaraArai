@@ -266,3 +266,5 @@ MonoBehaviour:
   clickTimeLimit: 0.2
   dragStartDistance: 0.2
   dirtVisual: {fileID: 1025712049115408148}
+  stockTargetName: Stock
+  moneyTargetName: Money

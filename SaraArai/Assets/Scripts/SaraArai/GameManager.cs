@@ -6,9 +6,12 @@ using UnityEngine;
 public class GameManager : MonoBehaviour
 {
     private int money = 10;
+    private int stockPlateCount = 0;
     private int plateCost = 1;
+    [SerializeField] private int cleanPlateMoneyReward = 10;
     private WashPlate currentWashPlate;
     [SerializeField] private TextMeshProUGUI moneyText;
+    [SerializeField] private TextMeshProUGUI stockText;
     [SerializeField] private GameObject platePrefab;//te-buru no ue no sara
     [SerializeField] private GameObject washPlatePrefab;//arau toki no sara\
     [SerializeField] private Transform washPoint;
@@ -26,6 +29,7 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         UpdateMoneyText();
+        UpdateStockText();
     }
 
     // Update is called once per frame
@@ -38,10 +42,32 @@ public class GameManager : MonoBehaviour
     {
         moneyText.text = "所持金 : " + money + "円"; //.Tostring()は書かなくても勝手に解釈されるらしい。
     }
+
+    void UpdateStockText()
+    {
+        if (stockText == null)
+        {
+            return;
+        }
+
+        stockText.text = "Stock : " + stockPlateCount + "枚";
+    }
+
     public void AddMoney(int amount)
     {
         money += amount;
         UpdateMoneyText();
+    }
+
+    public void AddCleanPlateToStock()
+    {
+        stockPlateCount++;
+        UpdateStockText();
+    }
+
+    public void SellCleanPlate()
+    {
+        AddMoney(cleanPlateMoneyReward);
     }
 
     public void StartWashing(Plate tablePlate)
@@ -113,7 +139,6 @@ public class GameManager : MonoBehaviour
 
     public void FinishWashing()
     {
-        AddMoney(10);
         currentWashPlate = null;
     }
 
