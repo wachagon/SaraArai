@@ -33,7 +33,7 @@
 /[Aa]ssets/Plugins/Editor/JetBrains*
 # Jetbrains Rider personal-layer settings
 *.DotSettings.user
-
+.DS_Store
 # Visual Studio cache directory
 .vs/
 
