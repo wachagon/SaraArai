@@ -11,6 +11,9 @@ public class Player : MonoBehaviour
     private Rigidbody2D rb;
     private Vector2 moveInput;
 
+    public float shootInterval = 0.5f;
+    private float shootTimer = 0f;
+
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -23,28 +26,35 @@ public class Player : MonoBehaviour
 
         moveInput = new Vector2(moveX, moveY).normalized;
 
-        // 2. è\éöÉLÅ[ÅiñÓàÛÉLÅ[ÅjÇ≈íeÇî≠éÀ
-        Vector2 shootDir = Vector2.zero;
-        if (Input.GetKeyDown(KeyCode.UpArrow)) shootDir = Vector2.up;
-        if (Input.GetKeyDown(KeyCode.DownArrow)) shootDir = Vector2.down;
-        if (Input.GetKeyDown(KeyCode.LeftArrow)) shootDir = Vector2.left;
-        if (Input.GetKeyDown(KeyCode.RightArrow)) shootDir = Vector2.right;
+        if (shootTimer > 0)
+        {
+            shootTimer -= Time.deltaTime;
+        }
 
-        if (shootDir != Vector2.zero)
+        Vector2 shootDir = Vector2.zero;
+        if (Input.GetMouseButton(0))
+        {
+            Vector3 mouseScreenPos = Input.mousePosition;
+            mouseScreenPos.z = -Camera.main.transform.position.z;
+            Vector3 mouseWorldPos = Camera.main.ScreenToWorldPoint(mouseScreenPos);
+
+            shootDir = ((Vector2)mouseWorldPos - (Vector2)transform.position).normalized;
+        }
+
+        if (shootTimer <= 0 && shootDir != Vector2.zero)
         {
             Shoot(shootDir);
+            shootTimer = shootInterval;
         }
     }
 
     void FixedUpdate()
     {
-        // ï®óùââéZÇ…äÓÇ√Ç¢ÇΩääÇÁÇ©Ç»à⁄ìÆ
         rb.velocity = moveInput * moveSpeed;
     }
 
     void Shoot(Vector2 direction)
     {
-        // íeÇê∂ê¨ÇµÇƒë¨ìxÇó^Ç¶ÇÈ
         GameObject bullet = Instantiate(bulletPrefab, transform.position, Quaternion.identity);
         Rigidbody2D bulletRb = bullet.GetComponent<Rigidbody2D>();
 
@@ -53,7 +63,6 @@ public class Player : MonoBehaviour
             bulletRb.velocity = direction * bulletSpeed;
         }
 
-        // 2ïbå„Ç…é©ìÆçÌèú
         Destroy(bullet, 2f);
     }
 }
