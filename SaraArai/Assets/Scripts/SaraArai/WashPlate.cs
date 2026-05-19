@@ -9,16 +9,18 @@ public class WashPlate : MonoBehaviour
     [SerializeField] private SpriteRenderer dirtRenderer;
 
     private Texture2D dirtTexture;
+    private Collider2D plateCollider;
     private GameManager gameManager;
     private bool isWashing = true;
+    private Plate sourcePlate;
 
-    [SerializeField] private int brushRadius = 16;
+    [SerializeField] private int brushRadius = 3;
     [SerializeField] private float cleanPower = 0.15f;
 
     private float initialDirtAmount;
     private bool isCleaned = false;
 
-    [SerializeField] private float cleanThreshold = 0.1f;
+    [SerializeField] private float cleanThreshold = 0.05f;
 
     [SerializeField] private Transform spongeVisual;
 
@@ -26,6 +28,7 @@ public class WashPlate : MonoBehaviour
     void Awake()
     {
         sortingGroup = GetComponent<SortingGroup>();
+        plateCollider = GetComponent<Collider2D>();
         gameManager = FindObjectOfType<GameManager>();
     }
 
@@ -65,6 +68,15 @@ public class WashPlate : MonoBehaviour
         }
 
         MoveSpongeToMouse();
+
+        if (Input.GetMouseButtonDown(0)) // 左クリックを開始した瞬間
+        {
+            if (!IsMouseOverPlate())
+            {
+                gameManager.CloseWashing();
+                return;
+            }
+        }
 
         if (Input.GetMouseButton(0)) // 左クリックを押している間
         {
@@ -116,6 +128,13 @@ public class WashPlate : MonoBehaviour
         return dirtAmount;
     }
 
+    private bool IsMouseOverPlate()
+    {
+        Vector3 mouseWorldPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        Vector2 mousePosition2D = new Vector2(mouseWorldPosition.x, mouseWorldPosition.y);
+
+        return plateCollider.OverlapPoint(mousePosition2D);
+    }
     private void CheckCleaned()
     {
         if (isCleaned)
@@ -128,6 +147,10 @@ public class WashPlate : MonoBehaviour
             isCleaned = true;
             isWashing = false;
             spongeVisual.gameObject.SetActive(false);
+
+            sourcePlate.SetClean();
+            sourcePlate.ClearWashPlate();
+
             gameManager.FinishWashing();
             Destroy(gameObject);
         }
@@ -138,5 +161,10 @@ public class WashPlate : MonoBehaviour
         Vector3 mouseWorldPosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         mouseWorldPosition.z = spongeVisual.position.z;
         spongeVisual.position = mouseWorldPosition;
+    }
+
+    public void SetSourcePlate(Plate plate)
+    {
+        sourcePlate = plate;
     }
 }
