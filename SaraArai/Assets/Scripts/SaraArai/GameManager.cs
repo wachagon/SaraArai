@@ -6,9 +6,12 @@ using UnityEngine;
 public class GameManager : MonoBehaviour
 {
     private int money = 10;
+    private int stockPlateCount = 0;
     private int plateCost = 1;
-    private GameObject currentWashPlate;
+    [SerializeField] private int cleanPlateMoneyReward = 10;
+    private WashPlate currentWashPlate;
     [SerializeField] private TextMeshProUGUI moneyText;
+    [SerializeField] private TextMeshProUGUI stockText;
     [SerializeField] private GameObject platePrefab;//te-buru no ue no sara
     [SerializeField] private GameObject washPlatePrefab;//arau toki no sara\
     [SerializeField] private Transform washPoint;
@@ -26,6 +29,7 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         UpdateMoneyText();
+        UpdateStockText();
     }
 
     // Update is called once per frame
@@ -38,20 +42,66 @@ public class GameManager : MonoBehaviour
     {
         moneyText.text = "所持金 : " + money + "円"; //.Tostring()は書かなくても勝手に解釈されるらしい。
     }
+
+    void UpdateStockText()
+    {
+        if (stockText == null)
+        {
+            return;
+        }
+
+        stockText.text = "Stock : " + stockPlateCount + "枚";
+    }
+
     public void AddMoney(int amount)
     {
         money += amount;
         UpdateMoneyText();
     }
 
+    public void AddCleanPlateToStock()
+    {
+        stockPlateCount++;
+        UpdateStockText();
+    }
+
+    public void SellCleanPlate()
+    {
+        AddMoney(cleanPlateMoneyReward);
+    }
+
     public void StartWashing(Plate tablePlate)
     {
         if (currentWashPlate != null)
         {
+            currentWashPlate.gameObject.SetActive(false);
+        }
+
+        WashPlate washPlate = tablePlate.GetWashPlate();
+
+        if(washPlate == null)
+        {
+            GameObject washPlateObject = Instantiate(washPlatePrefab, washPoint.position, Quaternion.identity);
+            washPlate = washPlateObject.GetComponent<WashPlate>();
+            washPlate.SetSourcePlate(tablePlate);
+            tablePlate.SetWashPlate(washPlate);
+        }
+
+        washPlate.transform.position = washPoint.position;
+        washPlate.transform.localScale = new Vector3(3f, 3f, 1f);
+        washPlate.gameObject.SetActive(true);
+
+        currentWashPlate = washPlate;
+    }
+    public void CloseWashing()
+    {
+        if (currentWashPlate == null)
+        {
             return;
         }
-        currentWashPlate = Instantiate(washPlatePrefab, washPoint.position, Quaternion.identity);
-        currentWashPlate.transform.localScale = new Vector3(3f, 3f, 1f);
+
+        currentWashPlate.gameObject.SetActive(false);
+        currentWashPlate = null;
     }
 
     public void OnClickSpawnPlateButton()
@@ -89,7 +139,11 @@ public class GameManager : MonoBehaviour
 
     public void FinishWashing()
     {
-        AddMoney(10);
         currentWashPlate = null;
+    }
+
+    public bool IsWashingOpen()
+    {
+        return currentWashPlate != null;
     }
 }
