@@ -349,7 +349,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   dirtRenderer: {fileID: 930846056343889152}
-  brushRadius: 16
+  brushRadius: 3
   cleanPower: 0.15
   cleanThreshold: 0.1
-  spongeVisual: {fileID: 5894969527065381434, guid: efc0d5bf99b534b8cbe80e46fad5ce00, type: 3}
+  spongeVisual: {fileID: 6076623882174699968}
