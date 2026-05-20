@@ -97,7 +97,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fb32187fcbbcc2644a7ac3738f6e1a2c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  slowDamageAreaPrefab: {fileID: 3209207924009348342, guid: 759b3d82491407442985c5dc47b006e8, type: 3}
+  slowDamageAreaPrefab: {fileID: 8242288316810316494, guid: a4dd1267e1be6fd409eb10230e97d59d, type: 3}
   flightTime: 0.8
   arcHeight: 2
   maxLifetime: 3
