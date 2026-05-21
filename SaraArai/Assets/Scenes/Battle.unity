@@ -220,7 +220,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 077d21440a863564aa3cb79ad98755df, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  maxHp: 1
   target: {fileID: 1091899078}
+  targetPos: {fileID: 848661596}
+  moveSpeed: 10
+  moveRange: 5
+  arriveDistance: 0.1
+  waitTimeAtTarget: 0.5
+  stayInsideCamera: 1
+  cameraPadding: 0.5
   projectilePrefab: {fileID: 3651797445138499930, guid: cc92d269b9f95784393fa10424814657, type: 3}
   attackInterval: 5
   projectilesPerAttack: 3
@@ -265,6 +273,37 @@ CircleCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Radius: 0.5
+--- !u!1 &848661595
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 848661596}
+  m_Layer: 0
+  m_Name: EnemyNextPos
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &848661596
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 848661595}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1091899074
 GameObject:
   m_ObjectHideFlags: 0
@@ -328,6 +367,7 @@ MonoBehaviour:
   maxHp: 100
   bulletPrefab: {fileID: 2907487169453001718, guid: 2a9b4e89ca145e045889629b9dfa0d8e, type: 3}
   bulletSpeed: 10
+  bulletDamage: 1
   shootInterval: 0.5
 --- !u!212 &1091899077
 SpriteRenderer:
@@ -530,3 +570,4 @@ SceneRoots:
   - {fileID: 1570057965}
   - {fileID: 1091899078}
   - {fileID: 478882675}
+  - {fileID: 848661596}

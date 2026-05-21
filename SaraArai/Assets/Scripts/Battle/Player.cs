@@ -8,6 +8,7 @@ public class Player : MonoBehaviour
     public float maxHp = 100f;
     public GameObject bulletPrefab;
     public float bulletSpeed = 10f; 
+    public float bulletDamage = 10f;
 
     private Rigidbody2D rb;
     private Vector2 moveInput;
@@ -64,6 +65,22 @@ public class Player : MonoBehaviour
     {
         GameObject bullet = Instantiate(bulletPrefab, transform.position, Quaternion.identity);
         Rigidbody2D bulletRb = bullet.GetComponent<Rigidbody2D>();
+        PlayerBullet playerBullet = bullet.GetComponent<PlayerBullet>();
+        Collider2D bulletCollider = bullet.GetComponent<Collider2D>();
+
+        if (playerBullet == null)
+        {
+            playerBullet = bullet.AddComponent<PlayerBullet>();
+        }
+
+        if (bulletCollider == null)
+        {
+            CircleCollider2D circleCollider = bullet.AddComponent<CircleCollider2D>();
+            circleCollider.radius = 0.5f;
+            circleCollider.isTrigger = true;
+        }
+
+        playerBullet.SetDamage(bulletDamage);
 
         if (bulletRb != null)
         {

@@ -4,7 +4,15 @@ using UnityEngine;
 
 public class Enemy : MonoBehaviour
 {
+    public float maxHp = 100f;
     public Transform target;
+    public Transform targetPos;
+    public float moveSpeed = 2f;
+    public float moveRange = 4f;
+    public float arriveDistance = 0.1f;
+    public float waitTimeAtTarget = 0.5f;
+    public bool stayInsideCamera = true;
+    public float cameraPadding = 0.5f;
     public GameObject projectilePrefab;
     public float attackInterval = 2f;
     public int projectilesPerAttack = 3;
@@ -16,10 +24,20 @@ public class Enemy : MonoBehaviour
     public bool summonOnlyOnce = false;
 
     private float attackTimer;
+    private float currentHp;
+    private Vector2 startPosition;
+    private float moveWaitTimer;
     private bool hasSummonedSoldiers;
+    private bool createdTargetPos;
+    private bool isDefeated;
 
     void Start()
     {
+        currentHp = maxHp;
+        startPosition = transform.position;
+        SetupTargetPos();
+        SetRandomTargetPos();
+
         if (target == null)
         {
             Player player = FindObjectOfType<Player>();
@@ -32,6 +50,13 @@ public class Enemy : MonoBehaviour
 
     void Update()
     {
+        if (isDefeated)
+        {
+            return;
+        }
+
+        MoveToTargetPos();
+
         if (target == null)
         {
             return;
@@ -84,6 +109,87 @@ public class Enemy : MonoBehaviour
         return true;
     }
 
+    void SetupTargetPos()
+    {
+        if (targetPos != null)
+        {
+            return;
+        }
+
+        GameObject targetPosObject = new GameObject(name + " TargetPos");
+        targetPos = targetPosObject.transform;
+        createdTargetPos = true;
+    }
+
+    void SetRandomTargetPos()
+    {
+        if (targetPos == null)
+        {
+            return;
+        }
+
+        Vector2 randomOffset = Random.insideUnitCircle * moveRange;
+        Vector2 nextPosition = startPosition + randomOffset;
+        targetPos.position = ClampToCamera(nextPosition);
+    }
+
+    void MoveToTargetPos()
+    {
+        if (targetPos == null)
+        {
+            return;
+        }
+
+        if (moveWaitTimer > 0f)
+        {
+            moveWaitTimer -= Time.deltaTime;
+            return;
+        }
+
+        Vector2 currentPosition = transform.position;
+        Vector2 targetPosition = targetPos.position;
+
+        transform.position = Vector2.MoveTowards(
+            currentPosition,
+            targetPosition,
+            moveSpeed * Time.deltaTime
+        );
+
+        if (stayInsideCamera)
+        {
+            transform.position = ClampToCamera(transform.position);
+        }
+
+        if (Vector2.Distance(transform.position, targetPosition) <= arriveDistance)
+        {
+            moveWaitTimer = waitTimeAtTarget;
+            SetRandomTargetPos();
+        }
+    }
+
+    Vector2 ClampToCamera(Vector2 position)
+    {
+        if (!stayInsideCamera || Camera.main == null)
+        {
+            return position;
+        }
+
+        Camera mainCamera = Camera.main;
+        float distanceFromCamera = Mathf.Abs(mainCamera.transform.position.z - transform.position.z);
+        Vector3 bottomLeft = mainCamera.ViewportToWorldPoint(new Vector3(0f, 0f, distanceFromCamera));
+        Vector3 topRight = mainCamera.ViewportToWorldPoint(new Vector3(1f, 1f, distanceFromCamera));
+
+        float minX = bottomLeft.x + cameraPadding;
+        float maxX = topRight.x - cameraPadding;
+        float minY = bottomLeft.y + cameraPadding;
+        float maxY = topRight.y - cameraPadding;
+
+        position.x = Mathf.Clamp(position.x, minX, maxX);
+        position.y = Mathf.Clamp(position.y, minY, maxY);
+
+        return position;
+    }
+
     void ShootArcProjectilesNearTarget()
     {
         for (int i = 0; i < projectilesPerAttack; i++)
@@ -129,5 +235,31 @@ public class Enemy : MonoBehaviour
             }
         }
     }
-}
 
+    public void TakeDamage(float damage)
+    {
+        if (isDefeated)
+        {
+            return;
+        }
+
+        currentHp = Mathf.Max(0f, currentHp - damage);
+
+        if (currentHp <= 0f)
+        {
+            Defeat();
+        }
+    }
+
+    void Defeat()
+    {
+        isDefeated = true;
+
+        if (createdTargetPos && targetPos != null)
+        {
+            Destroy(targetPos.gameObject);
+        }
+
+        Destroy(gameObject);
+    }
+}
