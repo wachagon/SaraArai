@@ -28,7 +28,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.8, y: 0.8, z: 0.8}
+  m_LocalScale: {x: 0.049999997, y: 0.049999997, z: 0.049999997}
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 0}
@@ -74,7 +74,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: -2413806693520163455, guid: a86470a33a6bf42c4b3595704624658b, type: 3}
+  m_Sprite: {fileID: 21300000, guid: cb6059cf727459c4f8bcba5f0609adc6, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -97,7 +97,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fb32187fcbbcc2644a7ac3738f6e1a2c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  slowDamageAreaPrefab: {fileID: 8242288316810316494, guid: a4dd1267e1be6fd409eb10230e97d59d, type: 3}
+  slowDamageAreaPrefab: {fileID: 3209207924009348342, guid: 759b3d82491407442985c5dc47b006e8, type: 3}
   flightTime: 0.8
   arcHeight: 2
   maxLifetime: 3
