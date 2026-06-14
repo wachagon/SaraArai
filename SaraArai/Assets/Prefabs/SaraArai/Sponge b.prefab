@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 5894969527065381434}
   - component: {fileID: 1365507859061012028}
   m_Layer: 0
-  m_Name: Sponge
+  m_Name: Sponge b
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
