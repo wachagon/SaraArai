@@ -16,12 +16,14 @@ public class Plate : MonoBehaviour
     [SerializeField] private float clickTimeLimit = 0.2f;
     [SerializeField] private float dragStartDistance = 0.2f;
     [SerializeField] private GameObject dirtVisual;
+    [SerializeField] private GameObject starVisual;
     [SerializeField] private string stockTargetName = "Stock";
     [SerializeField] private string moneyTargetName = "Money";
     private float mouseDownTime;
 
     void Awake()
     {
+        starVisual.SetActive(false);
         gameManager = FindObjectOfType<GameManager>();
     }
 
@@ -106,6 +108,10 @@ public class Plate : MonoBehaviour
         if (dirtVisual != null)
         {
             dirtVisual.SetActive(false);
+        }
+        if (starVisual != null)
+        {
+            starVisual.SetActive(true);
         }
         isClean = true;
     }

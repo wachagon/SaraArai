@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Player : MonoBehaviour
 {
@@ -9,6 +10,7 @@ public class Player : MonoBehaviour
     public GameObject bulletPrefab;
     public float bulletSpeed = 10f; 
     public float bulletDamage = 10f;
+    [SerializeField] private GameObject gameOverPanel;
 
     private Rigidbody2D rb;
     private Vector2 moveInput;
@@ -23,6 +25,7 @@ public class Player : MonoBehaviour
     {
         rb = GetComponent<Rigidbody2D>();
         currentHp = maxHp;
+        gameOverPanel.SetActive(false);
     }
 
     void Update()
@@ -47,6 +50,7 @@ public class Player : MonoBehaviour
             Vector3 mouseWorldPos = Camera.main.ScreenToWorldPoint(mouseScreenPos);
 
             shootDir = ((Vector2)mouseWorldPos - (Vector2)transform.position).normalized;
+            GameManager.stockPlateCount--;
         }
 
         if (shootTimer <= 0 && shootDir != Vector2.zero)
@@ -113,7 +117,14 @@ public class Player : MonoBehaviour
 
         if (currentHp <= 0f)
         {
-            Debug.Log("Player defeated");
+            gameOverPanel.SetActive(true);
+            Time.timeScale = 0f;
         }
+    }
+
+    public void Retry()
+    {
+        Time.timeScale = 1f;
+        SceneManager.LoadScene("SaraArai");
     }
 }
