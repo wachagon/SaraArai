@@ -40,7 +40,7 @@ public class Player : MonoBehaviour
         }
 
         Vector2 shootDir = Vector2.zero;
-        if (Input.GetMouseButton(0))
+        if (Input.GetMouseButton(0) && GameManager.stockPlateCount > 0)
         {
             Vector3 mouseScreenPos = Input.mousePosition;
             mouseScreenPos.z = -Camera.main.transform.position.z;
