@@ -236,7 +236,7 @@ MonoBehaviour:
   soldierPrefab: {fileID: 4640745819766509382, guid: dbe7c5beefad60647ab1de0d03206473, type: 3}
   soldiersPerSummon: 4
   soldierSpawnRadius: 1.5
-  summonChance: 0.1
+  summonChance: 0.3
   summonOnlyOnce: 0
 --- !u!58 &478882677
 CircleCollider2D:
@@ -364,7 +364,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveSpeed: 5
-  maxHp: 10
+  maxHp: 1
   bulletPrefab: {fileID: 2907487169453001718, guid: 2a9b4e89ca145e045889629b9dfa0d8e, type: 3}
   bulletSpeed: 10
   bulletDamage: 1
