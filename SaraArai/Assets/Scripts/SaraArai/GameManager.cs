@@ -6,7 +6,7 @@ using UnityEngine;
 public class GameManager : MonoBehaviour
 {
     private int money = 10;
-    private int stockPlateCount = 0;
+    public static int stockPlateCount = 0;
     private int plateCost = 1;
     [SerializeField] private int cleanPlateMoneyReward = 10;
     private WashPlate currentWashPlate;
@@ -21,11 +21,6 @@ public class GameManager : MonoBehaviour
     [SerializeField] private float plateSlideDuration = 0.5f;
     [SerializeField] private float plateStartYOffset = 5f;
 
-    // void Awake()
-    // {
-    //     moneyText = GameObject.Find("MoneyText").GetComponent<TextMeshProUGUI>();
-    // }
-    // Start is called before the first frame update
     void Start()
     {
         UpdateMoneyText();
