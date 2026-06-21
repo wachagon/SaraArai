@@ -24,8 +24,8 @@ public class Player : MonoBehaviour
     private float speedMultiplier = 1f;
     private float slowTimer;
 
-    public float shootInterval = 0.5f;
-    private float shootTimer = 0f;
+    //public float shootInterval = 0.5f;
+    //private float shootTimer = 0f;
 
     private readonly float[] sizeStages = new float[] { 2.0f, 3.0f, 4.0f };
 
@@ -60,13 +60,13 @@ public class Player : MonoBehaviour
 
         moveInput = new Vector2(moveX, moveY).normalized;
 
-        if (shootTimer > 0)
-        {
-            shootTimer -= Time.deltaTime;
-        }
+        //if (shootTimer > 0)
+        //{
+        //    shootTimer -= Time.deltaTime;
+        //}
 
         Vector2 shootDir = Vector2.zero;
-        if (Input.GetMouseButton(0) && GameManager.stockPlateCount > 0)
+        if (Input.GetMouseButtonDown(0) && GameManager.stockPlateCount > 0)
         {
             Vector3 mouseScreenPos = Input.mousePosition;
             mouseScreenPos.z = -Camera.main.transform.position.z;
@@ -74,18 +74,20 @@ public class Player : MonoBehaviour
 
             shootDir = ((Vector2)mouseWorldPos - (Vector2)transform.position).normalized;
             GameManager.stockPlateCount--;
+            Debug.Log("Stock Plate Count: " + GameManager.stockPlateCount);
             UpdateStockText();
             if (GameManager.stockPlateCount == 0)
             {
                 Bullet.SetActive(false);
             }
+            Shoot(shootDir);
         }
 
-        if (shootTimer <= 0 && shootDir != Vector2.zero)
-        {
-            Shoot(shootDir);
-            shootTimer = shootInterval;
-        }
+        //if (shootTimer <= 0 && shootDir != Vector2.zero)
+        //{
+        //    Shoot(shootDir);
+        //    shootTimer = shootInterval;
+        //}
     }
 
     void FixedUpdate()

@@ -7,7 +7,7 @@ using UnityEngine.UI;
 public class GameManager : MonoBehaviour
 {
     private static int money = 10;
-    public static int stockPlateCount = 0;
+    public static int stockPlateCount = 5;
     private int plateCost = 1;
     [SerializeField] private int cleanPlateMoneyReward = 10;
     private WashPlate currentWashPlate;
