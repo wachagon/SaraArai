@@ -1,9 +1,11 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Enemy : MonoBehaviour
 {
+    [SerializeField] private Slider enemyHPSlider;
     public float maxHp = 100f;
     public Transform target;
     public Transform targetPos;
@@ -30,9 +32,11 @@ public class Enemy : MonoBehaviour
     private bool hasSummonedSoldiers;
     private bool createdTargetPos;
     private bool isDefeated;
+    [SerializeField] private GameObject gameClearPanel;
 
     void Start()
     {
+        gameClearPanel.SetActive(false);
         currentHp = maxHp;
         startPosition = transform.position;
         SetupTargetPos();
@@ -46,6 +50,9 @@ public class Enemy : MonoBehaviour
                 target = player.transform;
             }
         }
+
+        enemyHPSlider.maxValue = maxHp;
+        enemyHPSlider.value = currentHp;
     }
 
     void Update()
@@ -244,6 +251,7 @@ public class Enemy : MonoBehaviour
         }
 
         currentHp = Mathf.Max(0f, currentHp - damage);
+        UpdateEnemyHpSlider();
 
         if (currentHp <= 0f)
         {
@@ -261,5 +269,12 @@ public class Enemy : MonoBehaviour
         }
 
         Destroy(gameObject);
+        gameClearPanel.SetActive(true);
+        Time.timeScale = 0f;
+    }
+    
+    private void UpdateEnemyHpSlider()
+    {
+        enemyHPSlider.value = currentHp;
     }
 }

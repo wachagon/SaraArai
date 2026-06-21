@@ -36,13 +36,14 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
+        currentLevel = PlayerPrefs.GetInt("SpongeSizeLevel", 0);
+        ApplySpongeSize();
         Cursor.visible = false;
-        Cursor.SetCursor(null, Vector2.zero, CursorMode.Auto);
         spongeCursor.gameObject.SetActive(true);
         washingPanel.SetActive(false);
         UpdateMoneyText();
         UpdateStockText();
-        UpdateUpgradeButton();
+        UpdateUpgradeUI();
     }
 
     // Update is called once per frame
@@ -199,6 +200,9 @@ public class GameManager : MonoBehaviour
             float newSize = sizeStages[currentLevel];
             spongeCursor.localScale = new Vector3(newSize, newSize, 1f);
             currentLevel++;
+            PlayerPrefs.SetInt("SpongeSizeLevel", currentLevel);
+            PlayerPrefs.Save();
+            ApplySpongeSize();
             UpdateUpgradeUI();
             UpdateMoneyText();
         }
@@ -215,5 +219,18 @@ public class GameManager : MonoBehaviour
 
         int needCost = costStages[currentLevel];
         costText.text = needCost.ToString() + "円";
+    }
+
+    private void ApplySpongeSize()
+    {
+        if (currentLevel == 0)
+        {
+            spongeCursor.localScale = new Vector3(1f, 1f, 1f);
+        }
+        else
+        {
+            float newSize = sizeStages[currentLevel - 1];
+            spongeCursor.localScale = new Vector3(newSize, newSize, 1f);
+        }
     }
 }

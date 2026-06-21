@@ -2,9 +2,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using TMPro;
+using UnityEngine.UI;
 
 public class Player : MonoBehaviour
 {
+    [SerializeField] private Slider playerHPSlider;
+    [SerializeField] private TextMeshProUGUI stockText;
+    
+
     public float moveSpeed = 5f;
     public float maxHp = 100f;
     public GameObject bulletPrefab;
@@ -21,11 +27,28 @@ public class Player : MonoBehaviour
     public float shootInterval = 0.5f;
     private float shootTimer = 0f;
 
+    private readonly float[] sizeStages = new float[] { 2.0f, 3.0f, 4.0f };
+
+    [SerializeField] GameObject Bullet;
+
     void Start()
     {
+        if (GameManager.stockPlateCount == 0)
+        {
+            Bullet.SetActive(false);
+        }
+        int currentLevel = PlayerPrefs.GetInt("SpongeSizeLevel", 0);
+        ApplySpongeSize(currentLevel);
+
         rb = GetComponent<Rigidbody2D>();
         currentHp = maxHp;
         gameOverPanel.SetActive(false);
+
+        playerHPSlider.maxValue = maxHp;
+        playerHPSlider.value = currentHp;
+
+        UpdateStockText();
+        CalculateMaxHp();
     }
 
     void Update()
@@ -51,6 +74,11 @@ public class Player : MonoBehaviour
 
             shootDir = ((Vector2)mouseWorldPos - (Vector2)transform.position).normalized;
             GameManager.stockPlateCount--;
+            UpdateStockText();
+            if (GameManager.stockPlateCount == 0)
+            {
+                Bullet.SetActive(false);
+            }
         }
 
         if (shootTimer <= 0 && shootDir != Vector2.zero)
@@ -114,6 +142,7 @@ public class Player : MonoBehaviour
     public void TakeDamage(float damage)
     {
         currentHp = Mathf.Max(0f, currentHp - damage);
+        UpdatePlayerHpSlider();
 
         if (currentHp <= 0f)
         {
@@ -126,5 +155,44 @@ public class Player : MonoBehaviour
     {
         Time.timeScale = 1f;
         SceneManager.LoadScene("SaraArai");
+    }
+
+    private void ApplySpongeSize(int level)
+    {
+        if (level == 0)
+        {
+            transform.localScale = new Vector3(1f, 1f, 1f);
+        }
+        else
+        {
+            float newSize = sizeStages[level - 1];
+            transform.localScale = new Vector3(newSize, newSize, 1f);
+        }
+    }
+
+    private void UpdateStockText()
+    {
+        stockText.text = "Stock: " + GameManager.stockPlateCount;
+    }
+
+    private void UpdatePlayerHpSlider()
+    {
+        playerHPSlider.value = currentHp;
+    }
+
+    private void CalculateMaxHp()
+    {
+        int currentLevel = PlayerPrefs.GetInt("SpongeSizeLevel", 0);
+        if (currentLevel == 0)
+        {
+            maxHp = 100f;
+        }
+        else
+        {
+            maxHp = 100f * currentLevel;
+        }
+        currentHp = maxHp;
+        playerHPSlider.maxValue = maxHp;
+        playerHPSlider.value = currentHp;
     }
 }
